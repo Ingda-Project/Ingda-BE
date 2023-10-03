@@ -1,7 +1,11 @@
 package com.example.ingda.common;
 
 import com.example.ingda.common.exception.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
 
+@Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseMessage<T> {
     private String msg;
     private int statusCode;
