@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -21,6 +22,13 @@ public class MemberController {
     @PostMapping(value = "/member")
     public ResponseMessage<?> createMember(@RequestBody @Valid MemberRequestDto memberRequestDto){
         memberService.createMember(memberRequestDto);
+        return new ResponseMessage<>(MessageCode.SUCCESS, null);
+    }
+
+    @PostMapping(value = "/login")
+    public ResponseMessage<?> login(@RequestBody MemberRequestDto memberRequestDto
+                                    , HttpServletResponse response){
+        memberService.login(memberRequestDto, response);
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
 
