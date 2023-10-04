@@ -13,7 +13,8 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND("알 수 없는 사용자입니다.", 400),
     EMAIL_DUPLICATED("이미 존재하는 이메일입니다.", 400),
     NICKNAME_DUPLICATED("이미 존재하는 닉네임입니다.", 400),
-    PASSWORD_INCORRECT("비밀번호가 올바르지 않습니다.", 400);
+    PASSWORD_INCORRECT("비밀번호가 올바르지 않습니다.", 400),
+    LOGIN_FAILED("로그인에 실패하였습니다.", 400);
 
     private final String msg;
     private final int statusCode;
