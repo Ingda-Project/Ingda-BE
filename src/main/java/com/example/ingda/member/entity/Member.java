@@ -36,4 +36,12 @@ public class Member {
     @Column(nullable = false)
     private int reviewCount;
 
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String password){
+        this.password = password;
+    }
+
 }
