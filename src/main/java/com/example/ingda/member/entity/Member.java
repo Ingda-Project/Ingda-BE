@@ -44,4 +44,8 @@ public class Member {
         this.password = password;
     }
 
+    public void changeAccountActivation(){
+        this.active = !this.active;
+    }
+
 }

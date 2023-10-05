@@ -52,4 +52,11 @@ public class MemberController {
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
 
+    @PutMapping(value = "/member/activation")
+    public ResponseMessage<?> changeAccountActivation(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        memberService.changeAccountActivation(userDetails);
+        return new ResponseMessage<>(MessageCode.SUCCESS, null);
+    }
+
+
 }

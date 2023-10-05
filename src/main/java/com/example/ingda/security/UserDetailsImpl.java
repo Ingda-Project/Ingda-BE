@@ -16,6 +16,9 @@ public class UserDetailsImpl implements UserDetails {
         this.email = email;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
     public Member getMember(){
         return member;
