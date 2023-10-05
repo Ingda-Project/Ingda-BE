@@ -40,8 +40,8 @@ public class MemberController {
 
     @PutMapping(value = "/member/nickname")
     public ResponseMessage<?> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails
-                                            , @RequestBody String nickname){
-        memberService.updateNickname(userDetails, nickname);
+                                            , @RequestBody MemberRequestDto memberRequestDto){
+        memberService.updateNickname(userDetails, memberRequestDto.getNickname());
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
 

@@ -1,7 +1,6 @@
 package com.example.ingda.member.service;
 
 
-import com.example.ingda.common.ResponseMessage;
 import com.example.ingda.common.exception.CustomException;
 import com.example.ingda.common.exception.ErrorCode;
 import com.example.ingda.member.dto.MemberPasswordRequestDto;
@@ -76,4 +75,6 @@ public class MemberService {
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(member.getEmail()));
     }
+
+
 }
