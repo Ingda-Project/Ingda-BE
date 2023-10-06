@@ -32,6 +32,11 @@ public class MemberController {
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
 
+    @GetMapping(value = "/member")
+    public ResponseMessage<?> getMemberInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return new ResponseMessage<>(MessageCode.SUCCESS, memberService.getMemberInfo(userDetails.getEmail()));
+    }
+
     @GetMapping(value = "/member/nickname")
     public ResponseMessage<?> checkNickname(@RequestParam String nickname){
         memberService.checkNickname(nickname);

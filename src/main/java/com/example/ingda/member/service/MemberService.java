@@ -5,7 +5,9 @@ import com.example.ingda.common.exception.CustomException;
 import com.example.ingda.common.exception.ErrorCode;
 import com.example.ingda.member.dto.MemberPasswordRequestDto;
 import com.example.ingda.member.dto.MemberRequestDto;
+import com.example.ingda.member.dto.MemberResponseDto;
 import com.example.ingda.member.entity.Member;
+import com.example.ingda.member.mapper.MemberMapper;
 import com.example.ingda.member.repository.MemberRepository;
 import com.example.ingda.security.UserDetailsImpl;
 import com.example.ingda.security.jwt.JwtUtil;
@@ -89,5 +91,9 @@ public class MemberService {
 
     }
 
-
+    @Transactional(readOnly = true)
+    public MemberResponseDto getMemberInfo(String email) {
+        Member member = memberRepository.findByEmail(email);
+        return MemberMapper.INSTANCE.memberToResponseDto(member);
+    }
 }
