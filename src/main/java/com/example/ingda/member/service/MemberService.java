@@ -7,7 +7,7 @@ import com.example.ingda.member.dto.MemberPasswordRequestDto;
 import com.example.ingda.member.dto.MemberRequestDto;
 import com.example.ingda.member.dto.MemberResponseDto;
 import com.example.ingda.member.entity.Member;
-import com.example.ingda.member.mapper.MemberMapper;
+import com.example.ingda.member.repository.mapper.MemberMapper;
 import com.example.ingda.member.repository.MemberRepository;
 import com.example.ingda.security.UserDetailsImpl;
 import com.example.ingda.security.jwt.JwtUtil;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service

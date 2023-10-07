@@ -1,6 +1,6 @@
 package com.example.ingda.member.entity;
 
-
+import com.example.ingda.common.audit.AuditorInfos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Member {
+public class Member extends AuditorInfos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
