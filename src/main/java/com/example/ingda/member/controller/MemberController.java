@@ -58,8 +58,14 @@ public class MemberController {
     }
 
     @PutMapping(value = "/member/activation")
-    public ResponseMessage<?> changeAccountActivation(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        memberService.changeAccountActivation(userDetails);
+    public ResponseMessage<?> changeAccountActivation(@RequestBody MemberRequestDto memberRequestDto){
+        memberService.changeAccountActivation(memberRequestDto);
+        return new ResponseMessage<>(MessageCode.SUCCESS, null);
+    }
+
+    @PutMapping(value = "/member/inactivation")
+    public ResponseMessage<?> changeAccountInactivation(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        memberService.changeAccountInactivation(userDetails);
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
 

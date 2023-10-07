@@ -1,19 +1,20 @@
 package com.example.ingda.member.entity;
 
-
+import com.example.ingda.common.audit.AuditorInfos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Member {
+public class Member extends AuditorInfos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +32,7 @@ public class Member {
     private Long score;
 
     @Column
-    private Boolean active;
+    private LocalDateTime active;
 
     @Column(nullable = false)
     private int reviewCount;
@@ -45,7 +46,10 @@ public class Member {
     }
 
     public void changeAccountActivation(){
-        this.active = !this.active;
+        this.active =  null;
     }
 
+    public void changeAccountInactivation() {
+        this.active = LocalDateTime.now();
+    }
 }
