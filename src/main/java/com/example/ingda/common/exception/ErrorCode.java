@@ -15,7 +15,8 @@ public enum ErrorCode {
     NICKNAME_DUPLICATED("이미 존재하는 닉네임입니다.", 400),
     PASSWORD_INCORRECT("비밀번호가 올바르지 않습니다.", 400),
     LOGIN_FAILED("로그인에 실패하였습니다.", 400),
-    INACTIVE_MEMBER("비활성화 계정입니다.", 400),;
+    INACTIVE_MEMBER("비활성화 계정입니다.", 400),
+    ACTIVATION_FAILED("계정 활성화에 실패하였습니다.", 400);
 
     private final String msg;
     private final int statusCode;

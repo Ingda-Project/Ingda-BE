@@ -51,6 +51,7 @@ public class WebSecurityConfig {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, new String[]{"/member", "/login"}).permitAll()
                 .antMatchers(HttpMethod.GET, new String[]{"/member/email", "/member/nickname"}).permitAll()
+                .antMatchers(HttpMethod.PUT, new String[]{"/member/activation"}).permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling()

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -31,7 +32,7 @@ public class Member {
     private Long score;
 
     @Column
-    private Boolean active;
+    private LocalDateTime active;
 
     @Column(nullable = false)
     private int reviewCount;
@@ -45,7 +46,10 @@ public class Member {
     }
 
     public void changeAccountActivation(){
-        this.active = !this.active;
+        this.active =  null;
     }
 
+    public void changeAccountInactivation() {
+        this.active = LocalDateTime.now();
+    }
 }

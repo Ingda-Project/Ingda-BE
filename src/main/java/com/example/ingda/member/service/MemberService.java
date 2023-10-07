@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -41,7 +42,6 @@ public class MemberService {
                                     .email(memberRequestDto.getEmail())
                                     .nickname(memberRequestDto.getNickname())
                                     .password(encodingPassword)
-                                    .active(true)
                                     .build());
     }
 
@@ -74,7 +74,7 @@ public class MemberService {
         Member member = memberRepository.findByEmail(memberRequestDto.getEmail());
         if(member == null) throw new CustomException(ErrorCode.LOGIN_FAILED);
 
-        if(!member.getActive()) throw new CustomException(ErrorCode.INACTIVE_MEMBER);
+        if(member.getActive() != null) throw new CustomException(ErrorCode.INACTIVE_MEMBER);
 
         if(!passwordEncoder.matches(memberRequestDto.getPassword(), member.getPassword())){
             throw new CustomException(ErrorCode.LOGIN_FAILED);
@@ -84,11 +84,21 @@ public class MemberService {
     }
 
     @Transactional
-    public void changeAccountActivation(UserDetailsImpl userDetails) {
+    public void changeAccountActivation(MemberRequestDto memberRequestDto) {
 
-        Member member = memberRepository.findByEmail(userDetails.getMember().getEmail());
+        Member member = memberRepository.findByEmail(memberRequestDto.getEmail());
+        if(!passwordEncoder.matches(memberRequestDto.getPassword(), member.getPassword())){
+            throw new CustomException(ErrorCode.ACTIVATION_FAILED);
+        }
+
         member.changeAccountActivation();
 
+    }
+
+    @Transactional
+    public void changeAccountInactivation(UserDetailsImpl userDetails) {
+        Member member = memberRepository.findByEmail(userDetails.getEmail());
+        member.changeAccountInactivation();
     }
 
     @Transactional(readOnly = true)
@@ -96,4 +106,6 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email);
         return MemberMapper.INSTANCE.memberToResponseDto(member);
     }
+
+
 }
