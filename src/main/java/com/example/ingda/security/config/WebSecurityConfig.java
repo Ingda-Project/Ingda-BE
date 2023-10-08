@@ -49,8 +49,8 @@ public class WebSecurityConfig {
         http.cors();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, new String[]{"/member", "/login"}).permitAll()
-                .antMatchers(HttpMethod.GET, new String[]{"/member/email", "/member/nickname"}).permitAll()
+                .antMatchers(HttpMethod.POST, new String[]{"/member", "/login", "/email"}).permitAll()
+                .antMatchers(HttpMethod.GET, new String[]{"/member/nickname"}).permitAll()
                 .antMatchers(HttpMethod.PUT, new String[]{"/member/activation"}).permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
