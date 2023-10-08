@@ -49,7 +49,7 @@ public class WebSecurityConfig {
         http.cors();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, new String[]{"/member", "/login", "/email"}).permitAll()
+                .antMatchers(HttpMethod.POST, new String[]{"/member", "/login", "/email", "/email/verifying"}).permitAll()
                 .antMatchers(HttpMethod.GET, new String[]{"/member/nickname"}).permitAll()
                 .antMatchers(HttpMethod.PUT, new String[]{"/member/activation"}).permitAll()
                 .anyRequest().authenticated()

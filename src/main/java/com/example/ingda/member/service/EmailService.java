@@ -3,8 +3,10 @@ package com.example.ingda.member.service;
 import com.example.ingda.common.exception.CustomException;
 import com.example.ingda.common.exception.ErrorCode;
 import com.example.ingda.member.dto.MemberRequestDto;
+import com.example.ingda.member.dto.TempEmailDto;
 import com.example.ingda.member.entity.Member;
 import com.example.ingda.member.repository.MemberRepository;
+import com.example.ingda.member.repository.TempEmailRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,12 +26,13 @@ import java.util.UUID;
 public class EmailService {
     private final JavaMailSender javaMailSender;
     private final MemberRepository memberRepository;
+    private final TempEmailRepository tempEmailRepository;
 
     @Value("${spring.mail.username}")
     String senderEmail;
 
     @Transactional
-    public void sendEmailForVerified(MemberRequestDto memberRequestDto) {
+    public boolean sendEmailForVerified(MemberRequestDto memberRequestDto) {
 
         Optional<Member> member = memberRepository.findByEmail(memberRequestDto.getEmail());
         if(member.isPresent()) throw new CustomException(ErrorCode.EMAIL_DUPLICATED);
@@ -37,11 +41,11 @@ public class EmailService {
         String code = UUID.randomUUID().toString().substring(0, 6);
         log.info("secret code : {}", code);
         MimeMessage message = javaMailSender.createMimeMessage();
-        String email = memberRequestDto.getEmail();
-        log.info("mail receiver : {}", email);
+        String receiverEmail = memberRequestDto.getEmail();
+        log.info("mail receiver : {}", receiverEmail);
         try {
             message.setFrom(senderEmail);
-            message.setRecipients(MimeMessage.RecipientType.TO, email);
+            message.setRecipients(MimeMessage.RecipientType.TO, receiverEmail);
             message.setSubject("Ingda 이메일 인증 서비스");
             String body = "";
             body += "<h3>" + "요청하신 인증 번호입니다." + "</h3>";
@@ -53,5 +57,28 @@ public class EmailService {
         }
 
         javaMailSender.send(message);
+
+
+        tempEmailRepository.save(TempEmailDto.builder()
+                                                .email(receiverEmail)
+                                                .code(code)
+                                                .verified(false)
+                                                .build());
+        return true;
+    }
+
+    public void verifyingEmail(Map<String, String> bodyMap) {
+        String email = bodyMap.get("email");
+        String code = bodyMap.get("code");
+        TempEmailDto emailDto = tempEmailRepository.findById(email).orElseThrow(
+                () -> new CustomException(ErrorCode.VERIFYING_CODE_WRONG)
+        );
+        log.info("저장된 코드 >> {}", emailDto.getCode());
+        if(!emailDto.getCode().equals(code)){
+           throw new CustomException(ErrorCode.VERIFYING_CODE_WRONG);
+        }
+        emailDto.verifying();
+        tempEmailRepository.save(emailDto);
+
     }
 }

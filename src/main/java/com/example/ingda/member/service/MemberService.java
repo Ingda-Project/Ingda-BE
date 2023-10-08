@@ -6,9 +6,11 @@ import com.example.ingda.common.exception.ErrorCode;
 import com.example.ingda.member.dto.MemberPasswordRequestDto;
 import com.example.ingda.member.dto.MemberRequestDto;
 import com.example.ingda.member.dto.MemberResponseDto;
+import com.example.ingda.member.dto.TempEmailDto;
 import com.example.ingda.member.entity.Member;
 import com.example.ingda.member.mapper.MemberMapper;
 import com.example.ingda.member.repository.MemberRepository;
+import com.example.ingda.member.repository.TempEmailRepository;
 import com.example.ingda.security.UserDetailsImpl;
 import com.example.ingda.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final TempEmailRepository tempEmailRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -35,6 +38,14 @@ public class MemberService {
 
         Optional<Member> member = memberRepository.findByEmail(memberRequestDto.getEmail());
         if(member.isPresent()) throw new CustomException(ErrorCode.EMAIL_DUPLICATED);
+
+        TempEmailDto tempEmailDto = tempEmailRepository.findById(memberRequestDto.getEmail()).orElseThrow(
+                () -> new CustomException(ErrorCode.VERIFYING_CODE_WRONG)
+        );
+        log.info("email verified >> {}", tempEmailDto.isVerified());
+        if(!tempEmailDto.isVerified()){
+            throw new CustomException(ErrorCode.VERIFYING_CODE_WRONG);
+        }
 
         checkNickname(memberRequestDto.getNickname());
 

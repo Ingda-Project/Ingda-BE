@@ -5,9 +5,12 @@ import com.example.ingda.common.ResponseMessage;
 import com.example.ingda.member.dto.MemberRequestDto;
 import com.example.ingda.member.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +25,9 @@ public class EmailController {
     }
 
     @PostMapping(value = "/email/verifying")
-    public ResponseMessage<?> verifyingEmail(@RequestBody MemberRequestDto memberRequestDto){
-        emailService.sendEmailForVerified(memberRequestDto);
-        return null;
+    public ResponseMessage<?> verifyingEmail(@RequestBody Map<String, String> bodyMap){
+        emailService.verifyingEmail(bodyMap);
+        return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
+
 }
