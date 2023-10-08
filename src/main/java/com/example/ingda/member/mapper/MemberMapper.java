@@ -1,4 +1,4 @@
-package com.example.ingda.member.repository.mapper;
+package com.example.ingda.member.mapper;
 
 import com.example.ingda.member.dto.MemberResponseDto;
 import com.example.ingda.member.entity.Member;
