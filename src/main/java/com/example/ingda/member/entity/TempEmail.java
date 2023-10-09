@@ -1,4 +1,4 @@
-package com.example.ingda.member.dto;
+package com.example.ingda.member.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,17 +7,21 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.time.LocalDateTime;
+
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(timeToLive = 300)
-public class TempEmailDto {
+@RedisHash(timeToLive = 3600)
+public class TempEmail {
     @Id
     private String email;
 
     private String code;
     private boolean verified;
+
+    private LocalDateTime timeStamp;
 
     public void verifying(){
         this.verified = true;

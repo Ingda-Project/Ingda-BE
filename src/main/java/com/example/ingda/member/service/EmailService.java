@@ -3,7 +3,7 @@ package com.example.ingda.member.service;
 import com.example.ingda.common.exception.CustomException;
 import com.example.ingda.common.exception.ErrorCode;
 import com.example.ingda.member.dto.MemberRequestDto;
-import com.example.ingda.member.dto.TempEmailDto;
+import com.example.ingda.member.entity.TempEmail;
 import com.example.ingda.member.entity.Member;
 import com.example.ingda.member.repository.MemberRepository;
 import com.example.ingda.member.repository.TempEmailRepository;
@@ -59,7 +59,7 @@ public class EmailService {
         javaMailSender.send(message);
 
 
-        tempEmailRepository.save(TempEmailDto.builder()
+        tempEmailRepository.save(TempEmail.builder()
                                                 .email(receiverEmail)
                                                 .code(code)
                                                 .verified(false)
@@ -70,10 +70,10 @@ public class EmailService {
     public void verifyingEmail(Map<String, String> bodyMap) {
         String email = bodyMap.get("email");
         String code = bodyMap.get("code");
-        TempEmailDto emailDto = tempEmailRepository.findById(email).orElseThrow(
+        TempEmail emailDto = tempEmailRepository.findById(email).orElseThrow(
                 () -> new CustomException(ErrorCode.VERIFYING_CODE_WRONG)
         );
-        log.info("저장된 코드 >> {}", emailDto.getCode());
+
         if(!emailDto.getCode().equals(code)){
            throw new CustomException(ErrorCode.VERIFYING_CODE_WRONG);
         }
