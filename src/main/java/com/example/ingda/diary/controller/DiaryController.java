@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class DiaryController {
@@ -18,7 +20,7 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping(value = "/diary")
-    public ResponseMessage<?> writeDiary(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody DiaryRequestDto diaryRequestDto){
+    public ResponseMessage<?> writeDiary(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid  DiaryRequestDto diaryRequestDto){
         diaryService.writeDiary(userDetails.getMember(), diaryRequestDto);
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
