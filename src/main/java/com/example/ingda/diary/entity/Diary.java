@@ -36,4 +36,9 @@ public class Diary extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
+
+    public void modifyDiary(String subject, String content){
+        this.subject = subject;
+        this.content = content;
+    }
 }
