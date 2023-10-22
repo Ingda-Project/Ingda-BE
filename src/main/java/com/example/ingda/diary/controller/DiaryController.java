@@ -43,4 +43,11 @@ public class DiaryController {
         diaryService.modifyDiaryContents(userDetails.getMember(), diaryId, diaryRequestDto);
         return new ResponseMessage<>(MessageCode.SUCCESS, null );
     }
+
+    @DeleteMapping("/diaries/{diaryId}")
+    public ResponseMessage<DiaryResponseDto> deleteDiary(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                 @PathVariable(name="diaryId") Long diaryId){
+        diaryService.deleteDiary(userDetails.getMember(), diaryId);
+        return new ResponseMessage<>(MessageCode.SUCCESS, null );
+    }
 }

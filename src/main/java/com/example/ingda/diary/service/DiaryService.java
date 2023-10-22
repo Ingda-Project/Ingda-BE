@@ -69,4 +69,16 @@ public class DiaryService {
         }
         diary.modifyDiary(diaryRequestDto.getSubject(), diaryRequestDto.getContent());
     }
+
+    @Transactional
+    public void deleteDiary(Member member, Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(
+                () -> new CustomException(ErrorCode.DIARY_NOT_FOUND)
+        );
+
+        if(!diary.getMember().getMemberId().equals(member.getMemberId())){
+            throw new CustomException(ErrorCode.AUTH_FAIL);
+        }
+        diaryRepository.delete(diary);
+    }
 }
