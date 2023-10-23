@@ -23,9 +23,6 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
-    defaults:
-      run:
-        working-directory: "./ingda"
 
     steps:
       - name: Checkout
@@ -63,10 +60,9 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: clean build -x test
-          build-root-directory: ingda
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
