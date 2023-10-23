@@ -23,9 +23,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
-#    defaults:
-#      run:
-#        working-directory: "./ingda"
+    defaults:
+      run:
+        working-directory: "./ingda"
 
     steps:
       - name: Checkout
