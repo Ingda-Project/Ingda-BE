@@ -1,6 +1,7 @@
 package com.example.ingda.member.entity;
 
 import com.example.ingda.common.audit.BaseEntity;
+import com.example.ingda.common.type.UserRoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column
-    private Long score;
+    private UserRoleType userRole;
 
     @Column
     private LocalDateTime active;
