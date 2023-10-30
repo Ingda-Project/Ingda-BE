@@ -3,6 +3,7 @@ package com.example.ingda.member.service;
 
 import com.example.ingda.common.exception.CustomException;
 import com.example.ingda.common.exception.ErrorCode;
+import com.example.ingda.common.type.UserRoleType;
 import com.example.ingda.member.dto.MemberPasswordRequestDto;
 import com.example.ingda.member.dto.MemberRequestDto;
 import com.example.ingda.member.dto.MemberResponseDto;
@@ -54,6 +55,7 @@ public class MemberService {
                                     .email(memberRequestDto.getEmail())
                                     .nickname(memberRequestDto.getNickname())
                                     .password(encodingPassword)
+                                    .userRole(UserRoleType.MEMBER)
                                     .build());
     }
 
