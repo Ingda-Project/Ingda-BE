@@ -2,8 +2,8 @@ package com.example.ingda.security;
 
 import com.example.ingda.common.exception.CustomException;
 import com.example.ingda.common.exception.ErrorCode;
-import com.example.ingda.member.entity.Member;
-import com.example.ingda.member.repository.MemberRepository;
+import com.example.ingda.domain.member.entity.Member;
+import com.example.ingda.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

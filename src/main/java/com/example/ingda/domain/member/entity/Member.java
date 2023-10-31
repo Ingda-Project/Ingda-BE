@@ -1,0 +1,62 @@
+package com.example.ingda.domain.member.entity;
+
+import com.example.ingda.common.audit.BaseEntity;
+import com.example.ingda.domain.member.type.UserRoleType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+public class Member extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long memberId;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String nickname;
+
+    @Column
+    private UserRoleType userRole;
+
+    @Column
+    private String sex;
+
+    @Column
+    private LocalDate birth;
+    @Column
+    private LocalDateTime inactive;
+
+    @Column(nullable = false)
+    private int reviewCount;
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String password){
+        this.password = password;
+    }
+
+    public void changeAccountActivation(){
+        this.inactive =  null;
+    }
+
+    public void changeAccountInactivation() {
+        this.inactive = LocalDateTime.now();
+    }
+}
