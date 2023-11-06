@@ -16,6 +16,7 @@ import com.example.ingda.security.UserDetailsImpl;
 import com.example.ingda.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+    @Value("${score.login}")
+    Long loginScore;
 
     @Transactional
     public void createMember(MemberRequestDto memberRequestDto) {
@@ -89,6 +93,8 @@ public class MemberService {
         member.updatePassword(encodingPassword);
     }
 
+
+    @Transactional
     public void login(MemberRequestDto memberRequestDto, HttpServletResponse response) {
         //ToDo => account lock system
         Member member = memberRepository.findByEmail(memberRequestDto.getEmail()).orElseThrow(
@@ -101,6 +107,8 @@ public class MemberService {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
+        member.lastConnectedAt();
+        member.getScore().addLoginScore(loginScore);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(member.getEmail()));
     }
 
