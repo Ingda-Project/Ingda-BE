@@ -52,7 +52,9 @@ public class WebSecurityConfig {
                 .antMatchers(HttpMethod.POST, new String[]{"/member", "/login", "/email", "/email/verifying"}).permitAll()
                 .antMatchers(HttpMethod.GET, new String[]{"/member/nickname"}).permitAll()
                 .antMatchers(HttpMethod.PUT, new String[]{"/member/activation"}).permitAll()
+                .antMatchers("/admin/member").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling()
