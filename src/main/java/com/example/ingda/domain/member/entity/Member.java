@@ -2,6 +2,7 @@ package com.example.ingda.domain.member.entity;
 
 import com.example.ingda.common.audit.BaseEntity;
 import com.example.ingda.domain.member.type.UserRoleType;
+import com.example.ingda.domain.score.entity.Score;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +45,12 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private int reviewCount;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "score_id")
+    private Score score;
+    @Column
+    private LocalDateTime lastConnectedAt;
+
     public void updateNickname(String nickname){
         this.nickname = nickname;
     }
@@ -58,5 +65,9 @@ public class Member extends BaseEntity {
 
     public void changeAccountInactivation() {
         this.inactive = LocalDateTime.now();
+    }
+
+    public void lastConnectedAt(){
+        this.lastConnectedAt = LocalDateTime.now();
     }
 }

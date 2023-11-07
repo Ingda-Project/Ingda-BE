@@ -12,10 +12,15 @@ import com.example.ingda.domain.member.entity.TempEmail;
 import com.example.ingda.domain.member.mapper.MemberMapper;
 import com.example.ingda.domain.member.repository.MemberRepository;
 import com.example.ingda.domain.member.repository.TempEmailRepository;
+import com.example.ingda.domain.score.dto.ScoreEventData;
+import com.example.ingda.domain.score.entity.Score;
+import com.example.ingda.domain.score.repository.ScoreRepository;
+import com.example.ingda.domain.score.type.ScoreType;
 import com.example.ingda.security.UserDetailsImpl;
 import com.example.ingda.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +35,9 @@ public class MemberService {
 
     private final TempEmailRepository tempEmailRepository;
     private final MemberRepository memberRepository;
+    private final ScoreRepository scoreRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher publisher;
     private final JwtUtil jwtUtil;
 
     @Transactional
@@ -51,6 +58,13 @@ public class MemberService {
 
         String encodingPassword = passwordEncoder.encode(memberRequestDto.getPassword());
 
+        Score score = Score.builder()
+                .loginScore(0)
+                .diaryScore(0)
+                .reviewScore(0)
+                .build();
+        scoreRepository.save(score);
+
         memberRepository.save(Member.builder()
                                     .email(memberRequestDto.getEmail())
                                     .nickname(memberRequestDto.getNickname())
@@ -58,6 +72,7 @@ public class MemberService {
                                     .userRole(UserRoleType.MEMBER)
                                     .birth(memberRequestDto.getBirth())
                                     .sex(memberRequestDto.getSex())
+                                    .score(score)
                                     .build());
     }
 
@@ -89,6 +104,8 @@ public class MemberService {
         member.updatePassword(encodingPassword);
     }
 
+
+    @Transactional
     public void login(MemberRequestDto memberRequestDto, HttpServletResponse response) {
         //ToDo => account lock system
         Member member = memberRepository.findByEmail(memberRequestDto.getEmail()).orElseThrow(
@@ -101,7 +118,13 @@ public class MemberService {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
+        member.lastConnectedAt();
+
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(member.getEmail()));
+        publisher.publishEvent(ScoreEventData.builder()
+                .member(member)
+                .scoreType(ScoreType.LOGIN)
+                .build());
     }
 
     @Transactional
