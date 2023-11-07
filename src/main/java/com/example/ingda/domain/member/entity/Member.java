@@ -45,7 +45,8 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private int reviewCount;
 
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "score_id")
     private Score score;
     @Column
     private LocalDateTime lastConnectedAt;

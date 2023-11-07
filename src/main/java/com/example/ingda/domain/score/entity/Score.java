@@ -20,27 +20,27 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scoreId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "score", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Long loginScore;
-    private Long diaryScore;
-    private Long reviewScore;
+    private Integer loginScore;
+    private Integer diaryScore;
+    private Integer reviewScore;
 
-    public void addLoginScore(Long loginScore){
+    public void addLoginScore(Integer loginScore){
         this.loginScore += loginScore;
     }
 
-    public void addDiaryScore(Long diaryScore){
+    public void addDiaryScore(Integer diaryScore){
         this.diaryScore += diaryScore;
     }
 
-    public void addReviewScore(Long loginScore){
+    public void addReviewScore(Integer loginScore){
         this.reviewScore += reviewScore;
     }
 
-    public Long getTotalScore(){
+    public Integer getTotalScore(){
         return this.loginScore + this.diaryScore + this.reviewScore;
     }
 }

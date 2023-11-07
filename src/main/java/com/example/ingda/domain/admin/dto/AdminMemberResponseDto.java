@@ -18,7 +18,7 @@ public class AdminMemberResponseDto {
     private Long memberId;
     private String email;
     private String nickname;
-    private Long score;
+    private Long totalScore;
     private SexType sex;
     private LocalDate birth;
     private int reviewCount;

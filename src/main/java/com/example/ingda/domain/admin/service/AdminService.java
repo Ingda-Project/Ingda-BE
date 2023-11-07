@@ -9,6 +9,8 @@ import com.example.ingda.domain.member.dto.MemberRequestDto;
 import com.example.ingda.domain.member.entity.Member;
 import com.example.ingda.domain.member.repository.MemberRepository;
 import com.example.ingda.domain.member.type.UserRoleType;
+import com.example.ingda.domain.score.entity.Score;
+import com.example.ingda.domain.score.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class AdminService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ScoreRepository scoreRepository;
 
     @Transactional(readOnly = true)
     public List<AdminMemberResponseDto> getAllMemberInfo(){
@@ -38,6 +41,13 @@ public class AdminService {
 
         String encodingPassword = passwordEncoder.encode(memberRequestDto.getPassword());
 
+        Score score = Score.builder()
+                .loginScore(0)
+                .diaryScore(0)
+                .reviewScore(0)
+                .build();
+        scoreRepository.save(score);
+
         memberRepository.save(Member.builder()
                 .email(memberRequestDto.getEmail())
                 .nickname(memberRequestDto.getNickname())
@@ -45,6 +55,7 @@ public class AdminService {
                 .userRole(UserRoleType.MEMBER)
                 .birth(memberRequestDto.getBirth())
                 .sex(memberRequestDto.getSex())
+                .score(score)
                 .build());
     }
 
