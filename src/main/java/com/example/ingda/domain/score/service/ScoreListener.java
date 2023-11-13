@@ -31,10 +31,10 @@ public class ScoreListener {
 
         switch(event.getScoreType()){
             case LOGIN:
-                member.getScore().addLoginScore(loginScore);
+                member.getScore().updateLoginScore(loginScore);
                 break;
             case WRITE:
-                member.getScore().addDiaryScore(diaryScore);
+                member.getScore().updateDiaryScore(diaryScore);
                 break;
             case REVIEW:
                 member.getScore().addReviewScore(reviewScore);

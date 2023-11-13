@@ -121,10 +121,13 @@ public class MemberService {
         member.lastConnectedAt();
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(member.getEmail()));
-        publisher.publishEvent(ScoreEventData.builder()
-                .member(member)
-                .scoreType(ScoreType.LOGIN)
-                .build());
+
+        if(member.getScore().getLoginCount() > 0){
+            publisher.publishEvent(ScoreEventData.builder()
+                    .member(member)
+                    .scoreType(ScoreType.LOGIN)
+                    .build());
+        }
     }
 
     @Transactional
