@@ -8,7 +8,10 @@ import com.example.ingda.domain.diary.entity.Diary;
 import com.example.ingda.domain.diary.mapper.DiaryMapper;
 import com.example.ingda.domain.diary.repository.DiaryRepository;
 import com.example.ingda.domain.member.entity.Member;
+import com.example.ingda.domain.score.dto.ScoreEventData;
+import com.example.ingda.domain.score.type.ScoreType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,7 @@ import java.util.Optional;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public void writeDiary(Member member, DiaryRequestDto diaryRequestDto) {
@@ -34,6 +38,13 @@ public class DiaryService {
                                     .member(member)
                                     .review(0L)
                                     .build());
+
+        if(member.getScore().getDiaryCount() > 0){
+            publisher.publishEvent(ScoreEventData.builder()
+                    .member(member)
+                    .scoreType(ScoreType.LOGIN)
+                    .build());
+        }
     }
 
     @Transactional(readOnly = true)
