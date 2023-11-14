@@ -24,18 +24,18 @@ public class Score {
     @OneToOne(mappedBy = "score", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @ColumnDefault("0")
+    @Column
     private Integer loginScore;
-
-    @ColumnDefault("1")
+    @Column
     private Integer loginCount;
-    @ColumnDefault("0")
+    @Column
+
     private Integer diaryScore;
-    @ColumnDefault("1")
+    @Column
 
     private Integer diaryCount;
-    @ColumnDefault("0")
+    @Column
+
     private Integer reviewScore;
 
     public void updateLoginScore(Integer loginScore){

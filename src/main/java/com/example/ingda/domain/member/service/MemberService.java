@@ -60,7 +60,9 @@ public class MemberService {
 
         Score score = Score.builder()
                 .loginScore(0)
+                .loginCount(1)
                 .diaryScore(0)
+                .diaryCount(1)
                 .reviewScore(0)
                 .build();
         scoreRepository.save(score);
