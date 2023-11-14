@@ -8,6 +8,7 @@ import com.example.ingda.domain.diary.entity.Diary;
 import com.example.ingda.domain.diary.mapper.DiaryMapper;
 import com.example.ingda.domain.diary.repository.DiaryRepository;
 import com.example.ingda.domain.member.entity.Member;
+import com.example.ingda.domain.member.repository.MemberRepository;
 import com.example.ingda.domain.score.dto.ScoreEventData;
 import com.example.ingda.domain.score.type.ScoreType;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,15 @@ import java.util.Optional;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public void writeDiary(Member member, DiaryRequestDto diaryRequestDto) {
-        Optional<Diary> byWriteDate = diaryRepository.findByWriteDateAndMember(diaryRequestDto.getWriteDate(), member);
+    public void writeDiary(Member memberDetail, DiaryRequestDto diaryRequestDto) {
+        Optional<Diary> byWriteDate = diaryRepository.findByWriteDateAndMember(diaryRequestDto.getWriteDate(), memberDetail);
         if(byWriteDate.isPresent()) throw new CustomException(ErrorCode.DIARY_COUNT_LIMIT);
+
+        Member member = memberRepository.findById(memberDetail.getMemberId()).orElseThrow();
 
         diaryRepository.save(Diary.builder()
                                     .subject(diaryRequestDto.getSubject())
@@ -42,7 +46,7 @@ public class DiaryService {
         if(member.getScore().getDiaryCount() > 0){
             publisher.publishEvent(ScoreEventData.builder()
                     .member(member)
-                    .scoreType(ScoreType.LOGIN)
+                    .scoreType(ScoreType.WRITE)
                     .build());
         }
     }
