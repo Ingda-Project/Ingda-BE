@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class ScoreListener {
 
     private final DiaryRepository diaryRepository;
+    private final ScoreService scoreService;
 
     @Value("${score.login}")
     Integer loginScore;
@@ -42,6 +44,7 @@ public class ScoreListener {
     Integer reviewScore;
 
     @Async
+    @Transactional
     @EventListener
     public void addScore(ScoreEventData event){
         Member member = event.getMember();
@@ -67,5 +70,6 @@ public class ScoreListener {
                 member.getScore().addReviewScore(reviewScore);
 
         }
+        scoreService.updateRanking(member);
     }
 }

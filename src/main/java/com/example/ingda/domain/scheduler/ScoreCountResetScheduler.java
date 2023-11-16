@@ -15,7 +15,7 @@ public class ScoreCountResetScheduler {
     private final ScoreRepository scoreRepository;
 
     @Transactional
-    @Scheduled(cron = "0 0 4 * * ?")
+    @Scheduled(cron = "0 0 3 * * ?")
     public void scoreCountReset(){
         log.info(">>> score count reset start <<<");
         scoreRepository.resetScoreCounts();
