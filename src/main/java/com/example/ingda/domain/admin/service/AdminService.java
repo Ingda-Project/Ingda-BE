@@ -28,9 +28,9 @@ public class AdminService {
     private final ScoreRepository scoreRepository;
 
     @Transactional(readOnly = true)
-    public List<AdminMemberResponseDto> getAllMemberInfo(){
-        //ToDo 조회 조건에 의해 검색
-        List<Member> memberList = memberRepository.findAll();
+    public List<AdminMemberResponseDto> getAllMemberInfo(String nickname, String email){
+
+        List<Member> memberList = memberRepository.getMemberListByAdmin(nickname, email);
         return AdminMapper.INSTANCE.memberListToResponseDtoList(memberList);
     }
 
