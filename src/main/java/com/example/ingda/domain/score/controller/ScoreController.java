@@ -5,7 +5,9 @@ import com.example.ingda.common.MessageCode;
 import com.example.ingda.common.ResponseMessage;
 import com.example.ingda.domain.score.dto.ResponseRankingDto;
 import com.example.ingda.domain.score.service.ScoreService;
+import com.example.ingda.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,8 +25,8 @@ public class ScoreController {
     }
 
     @GetMapping(value = "/ranking")
-    public ResponseMessage<?> getMyRankingInfo(){
-        List<ResponseRankingDto> rankingList = scoreService.getRankingTopList();
+    public ResponseMessage<?> getMyRankingInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<ResponseRankingDto> rankingList = scoreService.getMyRankingInfo(userDetails.getMember());
         return new ResponseMessage<>(MessageCode.SUCCESS, rankingList);
     }
 }

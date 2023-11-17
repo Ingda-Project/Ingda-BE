@@ -52,10 +52,18 @@ public class ScoreService {
     }
 
     @Transactional
-    public List<ResponseRankingDto> getMyRankingInfo(Long memberId){
-        //ToDo
+    public List<ResponseRankingDto> getMyRankingInfo(Member member){
+
         List<ResponseRankingDto> responseRankingDtoList = new ArrayList<>();
-        Set<ZSetOperations.TypedTuple<String>> tuples = redisTemplate.opsForZSet().reverseRangeWithScores(RANKING, 0, 10);
-        return null;
+        Double score = redisTemplate.opsForZSet().score(RANKING, member.getNickname());
+        Long rank = redisTemplate.opsForZSet().rank(RANKING, member.getNickname());
+
+        responseRankingDtoList.add(ResponseRankingDto.builder()
+                                        .ranking(rank)
+                                        .score(score.longValue())
+                                        .nickname(member.getNickname())
+                                        .build()
+        );
+        return responseRankingDtoList;
     }
 }
