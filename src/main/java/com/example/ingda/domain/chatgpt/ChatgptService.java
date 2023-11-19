@@ -3,7 +3,6 @@ package com.example.ingda.domain.chatgpt;
 
 import com.example.ingda.domain.chatgpt.dto.RequestChatGptDto;
 import com.example.ingda.domain.chatgpt.dto.ResponseChatGptDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,9 +36,9 @@ public class ChatgptService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(MEDIA_TYPE));
         headers.add(AUTHORIZATION, BEARER + API_KEY);
-
+        String content = "Can you check grammar and spelling in my English diary? next is my diary. \n" + question;
         //body
-        RequestChatGptDto requestChatGptDto = new RequestChatGptDto(MODEL, List.of(RequestChatGptDto.Message.builder().role("user").content(question).build()) , MAX_TOKEN, TEMPERATURE, TOP_P);
+        RequestChatGptDto requestChatGptDto = new RequestChatGptDto(MODEL, List.of(RequestChatGptDto.Message.builder().role("user").content(content).build()) , MAX_TOKEN, TEMPERATURE, TOP_P);
 
         ResponseEntity<ResponseChatGptDto> responseEntity = restTemplate.postForEntity(
                 URL,

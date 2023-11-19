@@ -31,7 +31,5 @@ public class Choice implements Serializable {
         this.message = message;
         this.index = index;
         this.finishReason = finishReason;
-
-
     }
 }
