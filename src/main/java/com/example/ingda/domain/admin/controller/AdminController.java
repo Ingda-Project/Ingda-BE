@@ -21,8 +21,7 @@ public class AdminController {
     @GetMapping(value = "/admin/members")
     public ResponseMessage<List<AdminMemberResponseDto>> getMemberInfo(@RequestParam(name = "nickname", required = false) String nickname,
                                                                        @RequestParam(name = "email", required = false) String email){
-        List<AdminMemberResponseDto> allMemberInfo = adminService.getAllMemberInfo(nickname, email);
-        return new ResponseMessage<>(MessageCode.SUCCESS, adminService.getAllMemberInfo(nickname, email));
+        List<AdminMemberResponseDto> allMemberInfo = adminService.getAllMemberInfo(nickname, email);        return new ResponseMessage<>(MessageCode.SUCCESS, adminService.getAllMemberInfo(nickname, email));
     }
 
     @PutMapping(value = "/admin/members/{memberId}")
