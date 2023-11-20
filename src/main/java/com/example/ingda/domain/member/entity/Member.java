@@ -70,4 +70,8 @@ public class Member extends BaseEntity {
     public void lastConnectedAt(){
         this.lastConnectedAt = LocalDateTime.now();
     }
+
+    public void minusReviewCount(){
+        if(this.reviewCount > 0) this.reviewCount -= 1;
+    }
 }

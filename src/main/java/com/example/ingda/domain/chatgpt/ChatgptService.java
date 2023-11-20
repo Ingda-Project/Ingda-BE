@@ -1,8 +1,11 @@
 package com.example.ingda.domain.chatgpt;
 
 
+import com.example.ingda.common.exception.CustomException;
+import com.example.ingda.common.exception.ErrorCode;
 import com.example.ingda.domain.chatgpt.dto.RequestChatGptDto;
 import com.example.ingda.domain.chatgpt.dto.ResponseChatGptDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class ChatgptService {
     //Config
@@ -31,20 +35,23 @@ public class ChatgptService {
 
 
 
-    public ResponseChatGptDto sendToChatgpt(String question) {
+    public ResponseEntity<ResponseChatGptDto> sendToChatgpt(String question) {
         //header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(MEDIA_TYPE));
         headers.add(AUTHORIZATION, BEARER + API_KEY);
-        String content = "Can you check grammar and spelling in my English diary? next is my diary. \n" + question;
+        String content = "Can you check grammar and spelling in my English diary? And please response only content. next is my diary. \n" + question;
         //body
         RequestChatGptDto requestChatGptDto = new RequestChatGptDto(MODEL, List.of(RequestChatGptDto.Message.builder().role("user").content(content).build()) , MAX_TOKEN, TEMPERATURE, TOP_P);
-
-        ResponseEntity<ResponseChatGptDto> responseEntity = restTemplate.postForEntity(
-                URL,
-                new HttpEntity<>(requestChatGptDto, headers),
-                ResponseChatGptDto.class);
-
-        return responseEntity.getBody();
+        try {
+            ResponseEntity<ResponseChatGptDto> responseEntity = restTemplate.postForEntity(
+                    URL,
+                    new HttpEntity<>(requestChatGptDto, headers),
+                    ResponseChatGptDto.class);
+            return responseEntity;
+        }catch(Exception e){
+            log.error("gpt networking error >>>>>> " + e.getMessage());
+            throw new CustomException(ErrorCode.GPT_ERROR);
+        }
     }
 }

@@ -24,7 +24,11 @@ public enum ErrorCode {
 
     //Diary 관련
     DIARY_COUNT_LIMIT("일기는 하루에 한 번만 쓰기가 가능합니다.", 400),
-    DIARY_NOT_FOUND("일기에 대한 정보를 찾을 수 없습니다.", 404);
+    DIARY_NOT_FOUND("일기에 대한 정보를 찾을 수 없습니다.", 404),
+
+    //Review 관련
+    REVIEW_COUNT_LIMIT("리뷰 가능 횟수가 부족합니다.", 400),
+    GPT_ERROR("AI 네트워크 에러입니다." , 500);
 
     private final String msg;
     private final int statusCode;
