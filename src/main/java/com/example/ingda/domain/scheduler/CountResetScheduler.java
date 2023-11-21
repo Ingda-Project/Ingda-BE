@@ -24,7 +24,7 @@ public class CountResetScheduler {
     }
 
     @Transactional
-    @Scheduled(cron = "0 56 * * * ?")
+    @Scheduled(cron = "0 15 3 * * ?")
     public void reviewCountReset(){
         log.info(">>> review count reset start <<<");
         memberRepository.resetReviewCounts();
