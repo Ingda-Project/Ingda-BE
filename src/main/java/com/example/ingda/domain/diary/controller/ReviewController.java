@@ -1,7 +1,7 @@
 package com.example.ingda.domain.diary.controller;
 
-import com.example.ingda.domain.chatgpt.dto.ResponseChatGptDto;
 import com.example.ingda.domain.diary.dto.ReviewRequestDto;
+import com.example.ingda.domain.diary.dto.ReviewResponseDto;
 import com.example.ingda.domain.diary.service.ReviewService;
 import com.example.ingda.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/diary/review")
-    public ResponseChatGptDto getReview(@AuthenticationPrincipal UserDetailsImpl userDetail, @RequestBody ReviewRequestDto reviewRequestDto){
+    public ReviewResponseDto getReview(@AuthenticationPrincipal UserDetailsImpl userDetail, @RequestBody ReviewRequestDto reviewRequestDto){
         return reviewService.getReviewFromChatgpt(userDetail.getMember().getMemberId(), reviewRequestDto);
     }
 }
