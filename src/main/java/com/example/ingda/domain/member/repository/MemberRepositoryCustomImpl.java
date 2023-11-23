@@ -27,6 +27,13 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
                 .fetch();
     }
 
+    @Override
+    public void resetReviewCounts() {
+        jpaQueryFactory.update(member)
+                .set(member.reviewCount, 5)
+                .execute();
+    }
+
     private BooleanExpression eqEmail(String email) {
         if(email == null) return null;
         return member.email.eq(email);

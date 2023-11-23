@@ -40,9 +40,14 @@ public class ChatgptService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(MEDIA_TYPE));
         headers.add(AUTHORIZATION, BEARER + API_KEY);
-        String content = "Can you check grammar and spelling in my English diary? And please response only content. next is my diary. \n" + question;
+        //String content = "Can you check grammar and spelling in my English diary? And please response only content. next is my diary. \n" + question;
+        String order = "My questions are always related to diary content. Please check the grammar and spelling of the contents.";
         //body
-        RequestChatGptDto requestChatGptDto = new RequestChatGptDto(MODEL, List.of(RequestChatGptDto.Message.builder().role("user").content(content).build()) , MAX_TOKEN, TEMPERATURE, TOP_P);
+        List<RequestChatGptDto.Message> messages = List.of(
+                RequestChatGptDto.Message.builder().role("system").content(order).build(),
+                RequestChatGptDto.Message.builder().role("user").content(question).build()
+        );
+        RequestChatGptDto requestChatGptDto = new RequestChatGptDto(MODEL, messages , MAX_TOKEN, TEMPERATURE, TOP_P);
         try {
             ResponseEntity<ResponseChatGptDto> responseEntity = restTemplate.postForEntity(
                     URL,

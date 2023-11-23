@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface MemberRepositoryCustom {
     List<Member> getMemberListByAdmin(String nickname, String email);
+
+    void resetReviewCounts();
 }

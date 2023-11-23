@@ -1,5 +1,7 @@
 package com.example.ingda.domain.chatgpt.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class ResponseChatGptDto {
     private String id;
@@ -16,14 +20,18 @@ public class ResponseChatGptDto {
     private String model;
     private List<Choice> choices;
 
+    private Usage usage;
+
+    @Getter
     @Builder
-    public ResponseChatGptDto(String id, String object,
-                              LocalDate created, String model,
-                              java.util.List<Choice> choices) {
-        this.id = id;
-        this.object = object;
-        this.created = created;
-        this.model = model;
-        this.choices = choices;
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Usage{
+        @JsonProperty("prompt_tokens")
+        private Integer promptTokens;
+        @JsonProperty("completion_tokens")
+        private Integer completionTokens;
+        @JsonProperty("total_tokens")
+        private Integer totalTokens;
     }
 }
