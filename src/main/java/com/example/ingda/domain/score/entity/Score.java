@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+
 
 import javax.persistence.*;
 
@@ -48,7 +48,7 @@ public class Score {
         this.diaryCount -= 1;
     }
 
-    public void addReviewScore(Integer loginScore){
+    public void addReviewScore(Integer reviewScore){
         this.reviewScore += reviewScore;
     }
     public Integer getTotalScore(){
