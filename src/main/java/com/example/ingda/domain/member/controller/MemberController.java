@@ -4,8 +4,10 @@ import com.example.ingda.common.MessageCode;
 import com.example.ingda.common.ResponseMessage;
 import com.example.ingda.domain.member.dto.MemberPasswordRequestDto;
 import com.example.ingda.domain.member.dto.MemberRequestDto;
+import com.example.ingda.domain.member.service.KakaoService;
 import com.example.ingda.domain.member.service.MemberService;
 import com.example.ingda.security.UserDetailsImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
+    private final KakaoService kakaoService;
 
     @PostMapping(value = "/member")
     public ResponseMessage<?> createMember(@RequestBody @Valid MemberRequestDto memberRequestDto){
@@ -66,6 +69,12 @@ public class MemberController {
     @PutMapping(value = "/member/inactivation")
     public ResponseMessage<?> changeAccountInactivation(@AuthenticationPrincipal UserDetailsImpl userDetails){
         memberService.changeAccountInactivation(userDetails);
+        return new ResponseMessage<>(MessageCode.SUCCESS, null);
+    }
+
+    @GetMapping(value = "/login/kakao")
+    public ResponseMessage<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        kakaoService.login(code, response);
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
 

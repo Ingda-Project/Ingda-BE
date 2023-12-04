@@ -1,6 +1,7 @@
 package com.example.ingda.domain.member.entity;
 
 import com.example.ingda.common.audit.BaseEntity;
+import com.example.ingda.domain.member.type.OAuthType;
 import com.example.ingda.domain.member.type.UserRoleType;
 import com.example.ingda.domain.score.entity.Score;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,9 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private String email;
+
+    @Column
+    private OAuthType oAuthType;
 
     @Column(nullable = false)
     private String password;
@@ -73,5 +77,10 @@ public class Member extends BaseEntity {
 
     public void minusReviewCount(){
         if(this.reviewCount > 0) this.reviewCount -= 1;
+    }
+
+    public Member oAuthUpdate(OAuthType kakao) {
+        this.oAuthType = kakao;
+        return this;
     }
 }
