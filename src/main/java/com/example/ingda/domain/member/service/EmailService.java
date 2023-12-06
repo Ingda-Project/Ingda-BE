@@ -35,7 +35,10 @@ public class EmailService {
     public boolean sendEmailForVerified(MemberRequestDto memberRequestDto) {
 
         Optional<Member> member = memberRepository.findByEmail(memberRequestDto.getEmail());
-        if(member.isPresent()) throw new CustomException(ErrorCode.EMAIL_DUPLICATED);
+        if(member.isPresent()) {
+            if(member.get().getOAuthType() != null) throw new CustomException(ErrorCode.SOCIAL_MEMBER);
+            throw new CustomException(ErrorCode.EMAIL_DUPLICATED);
+        }
 
         log.info("mail sender : {}", senderEmail);
         String code = UUID.randomUUID().toString().substring(0, 6);

@@ -44,7 +44,10 @@ public class MemberService {
     public void createMember(MemberRequestDto memberRequestDto) {
 
         Optional<Member> member = memberRepository.findByEmail(memberRequestDto.getEmail());
-        if(member.isPresent()) throw new CustomException(ErrorCode.EMAIL_DUPLICATED);
+        if(member.isPresent()){
+            if(member.get().getOAuthType() != null) throw new CustomException(ErrorCode.SOCIAL_MEMBER);
+            throw new CustomException(ErrorCode.EMAIL_DUPLICATED);
+        }
 
         TempEmail tempEmailDto = tempEmailRepository.findById(memberRequestDto.getEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.VERIFYING_CODE_WRONG)

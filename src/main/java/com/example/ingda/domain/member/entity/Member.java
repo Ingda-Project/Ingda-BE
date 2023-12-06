@@ -27,6 +27,7 @@ public class Member extends BaseEntity {
     private String email;
 
     @Column
+    @Enumerated(value = EnumType.STRING)
     private OAuthType oAuthType;
 
     @Column(nullable = false)
@@ -36,6 +37,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column
+    @Enumerated(value = EnumType.STRING)
     private UserRoleType userRole;
 
     @Column
