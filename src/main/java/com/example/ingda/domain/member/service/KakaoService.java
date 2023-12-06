@@ -5,6 +5,9 @@ import com.example.ingda.domain.member.dto.KakaoMemberDto;
 import com.example.ingda.domain.member.entity.Member;
 import com.example.ingda.domain.member.repository.MemberRepository;
 import com.example.ingda.domain.member.type.OAuthType;
+import com.example.ingda.domain.member.type.UserRoleType;
+import com.example.ingda.domain.score.entity.Score;
+import com.example.ingda.domain.score.repository.ScoreRepository;
 import com.example.ingda.security.jwt.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -25,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
-    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final ScoreRepository scoreRepository;
     private final JwtUtil jwtUtil;
 
     @Value("${kakao.client.id}")
@@ -35,6 +39,7 @@ public class KakaoService {
     @Value("${kakao.redirect.uri}")
     private String kakaoRedirectUri;
 
+    @Transactional
     public ResponseEntity<ResponseMessage> login(String code, HttpServletResponse response) throws JsonProcessingException{
         String accessToken = getToken(code);
         KakaoMemberDto kakaoMemberDto = getKakaoUserInfo(accessToken);
@@ -51,6 +56,26 @@ public class KakaoService {
 
         if(member != null){
             member = member.oAuthUpdate(OAuthType.KAKAO);
+        }else{
+            Score score = Score.builder()
+                    .loginScore(0)
+                    .loginCount(1)
+                    .diaryScore(0)
+                    .diaryCount(1)
+                    .reviewScore(0)
+                    .build();
+            scoreRepository.save(score);
+
+            member = Member.builder()
+                            .email(kakaoMemberDto.getEmail())
+                            .nickname(kakaoMemberDto.getNickname())
+                            .password("kakaoUser")
+                            .userRole(UserRoleType.MEMBER)
+                            .score(score)
+                            .oAuthType(OAuthType.KAKAO)
+                            .build();
+
+            memberRepository.save(member);
         }
         return member;
     }

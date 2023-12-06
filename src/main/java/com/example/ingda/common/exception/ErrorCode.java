@@ -21,6 +21,7 @@ public enum ErrorCode {
     INACTIVE_MEMBER("비활성화 계정입니다.", 400),
     ACTIVATION_FAILED("계정 활성화에 실패하였습니다.", 400),
     VERIFYING_CODE_WRONG("이메일 인증에 실패하였습니다.", 400),
+    SOCIAL_MEMBER("소셜 계정 회원입니다. 카카오나 구글 아이디로 로그인해주세요.", 400),
 
     //Diary 관련
     DIARY_COUNT_LIMIT("일기는 하루에 한 번만 쓰기가 가능합니다.", 400),
