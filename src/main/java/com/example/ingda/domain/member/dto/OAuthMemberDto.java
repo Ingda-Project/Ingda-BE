@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class KakaoMemberDto {
+public class OAuthMemberDto {
     private String id;
     private String email;
     private String nickname;
