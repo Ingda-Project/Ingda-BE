@@ -4,6 +4,7 @@ import com.example.ingda.common.MessageCode;
 import com.example.ingda.common.ResponseMessage;
 import com.example.ingda.domain.member.dto.MemberPasswordRequestDto;
 import com.example.ingda.domain.member.dto.MemberRequestDto;
+import com.example.ingda.domain.member.service.GoogleService;
 import com.example.ingda.domain.member.service.KakaoService;
 import com.example.ingda.domain.member.service.MemberService;
 import com.example.ingda.security.UserDetailsImpl;
@@ -21,6 +22,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final KakaoService kakaoService;
+    private final GoogleService googleService;
 
     @PostMapping(value = "/member")
     public ResponseMessage<?> createMember(@RequestBody @Valid MemberRequestDto memberRequestDto){
@@ -78,5 +80,10 @@ public class MemberController {
         return new ResponseMessage<>(MessageCode.SUCCESS, null);
     }
 
+    @GetMapping(value = "/login/google")
+    public ResponseMessage<?> googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        googleService.login(code, response);
+        return new ResponseMessage<>(MessageCode.SUCCESS, null);
+    }
 
 }
