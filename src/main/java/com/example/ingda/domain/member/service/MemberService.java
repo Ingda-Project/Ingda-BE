@@ -66,7 +66,7 @@ public class MemberService {
                 .loginCount(1)
                 .diaryScore(0)
                 .diaryCount(1)
-                .reviewScore(0)
+                .reviewScore(3)
                 .build();
         scoreRepository.save(score);
 
