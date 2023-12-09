@@ -31,15 +31,16 @@ public class ChatgptService {
     public static final String MEDIA_TYPE = "application/json; charset=UTF-8";
     public static final String URL = "https://api.openai.com/v1/chat/completions";
 
+    public static final String PERFECT = "perfect";
     public static final String ORDER =
-            "Modify my English diary for grammar or expression, and reply with the modified text only. " +
-            "This is my English from now on. " +
-            "If no changes needed, just say perfect.\n";
+            "Modify my English diary for grammar or expression, and reply with the modified text only.  " +
+            "If no changes needed, just say \"" + PERFECT + "\"." +
+            "This is my English from next line.\n";
     private final RestTemplate restTemplate = new RestTemplate();
 
 
 
-    public ResponseEntity<ResponseChatGptDto> sendToChatgpt(String question) {
+    public ResponseEntity<ResponseChatGptDto> sendToChatgpt(String diaryContent) {
         //header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(MEDIA_TYPE));
@@ -47,8 +48,7 @@ public class ChatgptService {
 
         //body
         List<RequestChatGptDto.Message> messages = List.of(
-                RequestChatGptDto.Message.builder().role("system").content(ORDER).build(),
-                RequestChatGptDto.Message.builder().role("user").content(question).build()
+                RequestChatGptDto.Message.builder().role("system").content(ORDER + diaryContent).build()
         );
         RequestChatGptDto requestChatGptDto = new RequestChatGptDto(MODEL, messages , MAX_TOKEN, TEMPERATURE, TOP_P);
         try {

@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.ingda.domain.chatgpt.ChatgptService.PERFECT;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -45,6 +47,10 @@ public class ReviewService {
         log.info("token usages >> prompt : {}, completion : {}, total : {}", usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens());
 
         Choice choice = responseChatGptDto.getChoices().get(0);
+
+        if(PERFECT.equals(choice.getMessage().getContent())){
+            choice.modifyContentMessage(requestDto.getContent());
+        }
         String review = choice.getMessage().getContent();
 
         publisher.publishEvent(ScoreEventData.builder()
