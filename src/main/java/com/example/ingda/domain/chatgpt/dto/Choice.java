@@ -32,4 +32,8 @@ public class Choice implements Serializable {
         this.index = index;
         this.finishReason = finishReason;
     }
+
+    public void modifyContentMessage(String text){
+        this.message.content = text;
+    }
 }
